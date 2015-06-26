@@ -3,10 +3,10 @@ var firstTime = 0;
 var frames = [];
 var up = true;
 var onion = false;
-var grid_w = 240;
-var grid_h = 320;
+var grid_w = 120;
+var grid_h = 140;
 var xoffset = 50;
-var yoffset = 100;
+var yoffset = 50;
 var block = 10;
 
 function setup() {
@@ -22,56 +22,22 @@ function setup() {
   console.log("5 .Press DOWN to load previous frame,");
   console.log("6. Press ALT LEFT to erase frame.");
   resetGrid();
-
+  clearPlayback();
 }
 
 function draw() {
   //draw grid
   drawGrid();
-  clearPlayback();
+  
 }
 
 function resetGrid(){
   ctx.fillColor(rgb(0,0,0));
-  ctx.fillRect(xoffset, 0, grid_w, grid_h);
+  ctx.fillRect(xoffset, yoffset, grid_w, grid_h);
 }
 
-window.addEventListener('mousedown', function(event){
-  
-  up = false;
-     if (mouseX > xoffset && mouseX<xoffset+grid_w && mouseY < grid_h) {
-      if(event.shiftKey) {
-        removeBlock(mouseX, mouseY);
-      } else if (ctx.getImageData(mouseX, mouseY, 1, 1).data[0]> 200 || ctx.getImageData(mouseX+2, mouseY+2, 1, 1).data[0]> 200) {
-        addBlock(mouseX, mouseY, 3);
-  } else {
-    if (event.button == 0) {
-      addBlock(mouseX, mouseY, 1);
-    } else {
-      addBlock(mouseX, mouseY, 0);
-    }
-}
 
-}
-} )
 
-window.addEventListener('mousemove', function(event){
-  
-  if (mouseX > xoffset && mouseX<xoffset+grid_w && mouseY < grid_h && up == false) {
- 
-    if(event.shiftKey) {
-      removeBlock(mouseX, mouseY);
-  
-    } else {
-        if (event.button == 0) {
-          addBlock(mouseX, mouseY, 1);
-        } else {
-          addBlock(mouseX, mouseY, 0);
-      }
-    }
-}
-
-} )
 
 
 function addBlock(x,y, state){
@@ -84,9 +50,6 @@ function addBlock(x,y, state){
      if (state == 1) {
   
       ctx.fillColor(rgb(255,0,0));
-    
-    
-  
 
     } else if (state == 2) {
     ctx.fillColor(rgb(255,0,0));
@@ -114,10 +77,7 @@ function removeBlock(x,y, state){
 }
 
 
-window.addEventListener('mouseup', function(event){
- up = true;
- getFrame(framenumber);
-})
+
 
 document.onkeydown = checkKey;
 
@@ -125,7 +85,7 @@ function checkKey(event){
   console.log(event.keyCode)
   if (event.keyCode == 39) {  //right  
       getFrame(framenumber);
-      ctx.clearRect(xoffset,0,grid_w,grid_h);
+      clearDrawspace();
       resetGrid();
       drawGrid();
       onion = false;
@@ -135,7 +95,7 @@ function checkKey(event){
   } else if (event.keyCode == 37 && framenumber>0) {  //left
       getFrame(framenumber);
       framenumber--;
-      ctx.clearRect(xoffset, 0, grid_w, grid_h);
+      clearDrawspace();
       onion = false;
       resetGrid();
       drawGrid();
@@ -145,11 +105,12 @@ function checkKey(event){
       loadFrame(framenumber-1, 1);
   } else if (event.keyCode == 32) {  //space
     console.log("clear");
-    ctx.clearRect(xoffset,0,grid_w,grid_h);
+    clearDrawspace(); 
+    clearPlayback(); 
     onion = false;
-      resetGrid();
-      drawGrid();
-      getFrame(framenumber);
+    resetGrid();
+    drawGrid();
+      //loadFrame(framenumber);
   } else if (event.keyCode == 38) {  //up
   
     if (onion == false) {
@@ -164,10 +125,10 @@ function checkKey(event){
 
 
 function hideOnion(){
-  for (var y = 5; y<grid_h; y+=block) { 
+  for (var y = block/2; y< grid_h; y+=block) { 
     
-      for (var x = xoffset+5; x<xoffset+grid_w; x+=block) {
-          var p = ctx.getImageData(x, y, 1, 1).data; 
+      for (var x = block/2; x < grid_w; x+=block) {
+          var p = ctx.getImageData(x+xoffset, y+yoffset, 1, 1).data; 
           
           if (p[0] == 50 && p[1] == 50 && p[2] == 50) {
             addBlock(x,y, 3)
@@ -182,25 +143,27 @@ function hideOnion(){
 
 function getFrame(framenumber){
     var f = "";
+    //console.log("getFrame");
     var i = 0;
-    for (var y = 5; y<grid_h; y+=block) { 
+    for (var y = block/2; y < grid_h; y += block) { 
     
-      for (var x = 5; x<grid_w; x+=block) {
-          var p = ctx.getImageData(x, y, 1, 1).data; 
+      for (var x = block/2; x < grid_w; x += block) {
+
+          var p = ctx.getImageData(x + xoffset, y + yoffset, 1, 1).data; 
           if (p[0] == 255 && p[1] == 0 && p[2] == 0) {
             //console.log("0");
             f +="1";
           } else {
             //console.log("1");
              f +="0";
-        }
-        
-}
+        }     
+  }
 
-i++;
-    }
-frames[framenumber] = f;
-//console.log("-------"+frames[framenumber]);
+  i++;
+      }
+  //console.log(f);
+  frames[framenumber] = f;
+  //console.log("-------"+frames[framenumber]);
 
 
 }
@@ -209,30 +172,32 @@ frames[framenumber] = f;
 function drawGrid(){
   ctx.strokeColor(rgb(30,30,30));
  for (var x = 0; x<= grid_w; x+=block) {
-    ctx.line(x+xoffset, 0, x+xoffset, grid_h);
+    ctx.line(x+xoffset, yoffset, x+xoffset, yoffset+ grid_h);
   }
   for (var y = 0; y<=grid_h; y+=block) {
-    ctx.line(xoffset, y, grid_w+xoffset, y);
+    ctx.line(xoffset, y+yoffset, grid_w+xoffset, y+yoffset);
   }
 
 }
 
 function loadFrame(_frameNumber, state){
-
+  //console.log("loadFrame")
   var i = 0;
   if (frames[_frameNumber]) {
   var s = frames[_frameNumber];
+  var xshift = block + xoffset + grid_w;
+  var yshift = yoffset;
   //console.log(s)
 
-   for (var y = 0; y<grid_h; y+=block) {
+   for (var y = 0; y < grid_h; y+=block) {
      
-     for (var x = xoffset; x<grid_w+xoffset; x+=block) {
+     for (var x = 0; x < grid_w; x+=block) {
       
       if (s.substring(i,i+1) == "1") {
         if (state != undefined && state == 1) {
-        addBlock(x,y,1);
+        addBlock(x + xshift, y + yoffset,1);
         } else {
-         addBlock(x,y,2); 
+         addBlock(x + block + xoffset + grid_w, y + yoffset,2); 
         }        
         }
       i++;
@@ -247,28 +212,24 @@ var counter = 0;
 function playBack(){
    
   counter++;
-  if (counter>50 && frames[playFrame]) { 
+  if (counter > 50 && frames[playFrame]) { 
     counter= 0;
     var i = 0;
-    //ctx.clearRect(0,350,240,320);
     clearPlayback();
-    //console.log(playFrame)
   if (playFrame < frames.length-1) {
     playFrame++;
   } else {
-    playFrame = 0;
-    
+    playFrame = 0;  
   }
 
     var s = frames[playFrame];
-    //
 
    for (var y = 0; y<grid_h; y+= block) {
      
      for (var x = 0; x < grid_w; x+= block) {
       
       if (s.substring(i,i+1) == "1") {
-        addBlock(x+grid_w + block, y, 2);
+        addBlock(x + grid_w + block + xoffset, y+ yoffset, 2);
         //wait(200);
       }
         i++
@@ -279,9 +240,56 @@ function playBack(){
 }
 }
 
+function clearDrawspace(){
+  ctx.clearRect(xoffset, yoffset, grid_w, grid_h);
+}
 function clearPlayback(){
-  ctx.clearRect(xoffset+grid_w+10,0, xoffset+490, grid_h);
+  ctx.clearRect(xoffset+grid_w+block,yoffset, xoffset+490, grid_h);
     ctx.fillColor(rgb(0,0,0));
-    ctx.fillRect(xoffset+grid_w+block, 0, grid_w, grid_h);
+    ctx.fillRect(xoffset+grid_w+block, yoffset, grid_w, grid_h);
 }
  
+
+///// listnerers
+window.addEventListener('mousemove', function(event){
+  
+  if (mouseX > xoffset && mouseX<xoffset+grid_w && mouseY > yoffset && mouseY < yoffset + grid_h && up == false) {
+ 
+    if(event.shiftKey) {
+      removeBlock(mouseX, mouseY);
+  
+    } else {
+        if (event.button == 0) {
+          addBlock(mouseX, mouseY, 1);
+        } else {
+          addBlock(mouseX, mouseY, 0);
+      }
+    }
+}
+
+} )
+window.addEventListener('mouseup', function(event){
+ up = true;
+ getFrame(framenumber);
+ loadFrame(framenumber,2);
+})
+
+
+window.addEventListener('mousedown', function(event){
+  
+  up = false;
+     if (mouseX > xoffset && mouseX < xoffset+grid_w && mouseY > yoffset && mouseY < yoffset + grid_h) {
+      if(event.shiftKey) {
+        removeBlock(mouseX, mouseY);
+      } else if (ctx.getImageData(mouseX, mouseY, 1, 1).data[0]> 200 || ctx.getImageData(mouseX+2, mouseY+2, 1, 1).data[0]> 200) {
+        addBlock(mouseX, mouseY, 3);
+  } else {
+    if (event.button == 0) {
+      addBlock(mouseX, mouseY, 1);
+    } else {
+      addBlock(mouseX, mouseY, 0);
+    }
+}
+
+}
+} )
