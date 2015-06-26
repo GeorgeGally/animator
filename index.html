@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>webRTC Test</title>
+
+<style>
+body { margin: 0; border: 0; overflow: hidden; color: #111; font-family: helvetica, arial; cursor: pointer;
+background-color:#eee;}
+#frame {
+  position: absolute;
+  top: 350px; left: 20px;
+}
+#instructions {
+  position: absolute;
+  top: 450px; left: 20px;
+}
+
+</style>
+
+
+</head>
+<body>
+<script src="js/jquery-1.10.1.min.js"></script>
+<script src="js/creative.js"></script>
+<script src="js/main.js"></script>
+
+<div id = "frame"></div> 
+<div id = "timer"><input id="frametime"></input></div> 
+<div id = "instructions">
+Press RIGHT to move to next frame. <br>
+Press LEFT to move to previous frame. <br>
+Press UP to onion view previous frame. <br>
+Press DOWN to load in previous frame. <br>
+Press SPACE to erase all pixels. <br>
+</div> 
+
+</body>
+</html>
