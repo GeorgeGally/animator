@@ -5,13 +5,11 @@ document.body.appendChild(canvas);
 var ctx = canvas.getContext('2d');
 canvas.setAttribute("id", "canvas1");
 
-// var hidden_canvas = document.createElement('canvas');
-// hidden_canvas.setAttribute("id", "canvas2");
-// document.body.appendChild(hidden_canvas);
-// hidden_canvas.style.position = 'absolute';
-// hidden_canvas.style.top = '0px';
-// hidden_canvas.style.right = '-2000px';
-// var hidden_ctx = hidden_canvas.getContext('2d');
+var hidden_canvas = document.createElement('canvas');
+hidden_canvas.setAttribute("id", "canvas2");
+document.body.appendChild(hidden_canvas);
+hidden_canvas.style.position = 'absolute';
+var hidden_ctx = hidden_canvas.getContext('2d');
 
 var width, height, w, h;
 resize();

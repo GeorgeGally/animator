@@ -2,37 +2,37 @@
 <html>
 <head>
 <title>webRTC Test</title>
-
+<script src="js/jquery-1.10.1.min.js"></script>
+<script type="text/javascript" src="js/LZWEncoder.js"></script>
+<script type="text/javascript" src="js/NeuQuant.js"></script>
+<script type="text/javascript" src="js/GIFEncoder.js"></script>
+<script type="text/javascript" src="js/b64.js"></script>
+<link rel="stylesheet" type="text/css" href="css/style.css">
+<link href='http://fonts.googleapis.com/css?family=Roboto:400,700' rel='stylesheet' type='text/css'>
 <style>
-body { margin: 0; border: 0; overflow: hidden; color: #111; font-family: helvetica, arial; cursor: pointer;
-background-color:#eee;}
-#frame {
-  position: absolute;
-  top: 350px; left: 20px;
-}
-#instructions {
-  position: absolute;
-  top: 450px; left: 20px;
-}
 
 </style>
 
 
 </head>
 <body>
-<script src="js/jquery-1.10.1.min.js"></script>
+
+<div id="menubar">GIFMAKER</div> 
 <script src="js/creative.js"></script>
 <script src="js/main.js"></script>
-
+<div id = "holder">
 <div id = "frame"></div> 
 <div id = "timer"><input id="frametime"></input></div> 
+<div id = "individual_frames"></div> 
 <div id = "instructions">
-Press RIGHT to move to next frame. <br>
-Press LEFT to move to previous frame. <br>
-Press UP to onion view previous frame. <br>
-Press DOWN to load in previous frame. <br>
-Press SPACE to erase all pixels. <br>
+<span class="key_info">RIGHT</span> = Move to next frame. <br>
+<span class="key_info">LEFT</span> = Move to previous frame. <br>
+<span class="key_info">UP</span> = Onion view previous frame. <br>
+<span class="key_info">DOWN</span> = Load in previous frame. <br>
+<span class="key_info">SPACE</span> = Erase frame pixels. <br>
+<span class="key_info">RETURN</span> = Generate Gif. <br>
 </div> 
-
+</div>
+<div id="playback_image"></div> 
 </body>
 </html>

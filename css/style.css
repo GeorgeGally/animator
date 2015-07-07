@@ -1,0 +1,49 @@
+body { 
+margin: 0; 
+border: 0; 
+overflow: hidden; 
+color: #111; 
+font-family: 'Roboto', helvetica, arial; cursor: pointer;
+background-color:#efefef;
+}
+
+#frame {
+  position: absolute;
+ top: 350px; left: 20px;
+ font-size: 11px;
+ color: #fff;
+ background: #ccc;
+ padding: 4px;
+ text-transform: uppercase;
+}
+
+#holder2 {
+	position: relative;
+	top: 100px; left: 100px;
+}
+#instructions {
+  position: absolute;
+  top: 450px; left: 20px;
+   font-size: 13px;
+   line-height: 24px;
+}
+
+#playback_image {
+	position: absolute;
+  top: 490px; left: 50px;
+   font-size: 13px;
+}
+#menubar {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: #fff;
+	height: 28px;
+	padding: 15px 0 5px 25px;
+	width: 100%;
+}
+.key_info {
+	background: #ccc;
+	padding: 4px;
+
+}
